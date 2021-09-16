@@ -43,12 +43,12 @@ switch (date("F")) {
         }
         $today = date("Y-m-d");
 
-$requetesql = $bdd->prepare('INSERT into lignefraishorsforfait (idVisiteur, mois, libelle, date, montant) values (:idVisiteur ,:mois ,:libelle ,:date , :montant');
+$requetesql = $bdd->prepare('INSERT into lignefraishorsforfait (idVisiteur, mois, libelle, date, montant) values (:idVisiteur ,:mois ,:libelle ,:date , :montant)');
 $requetesql->bindparam(':idVisiteur', $_SESSION['idvisiteur']);
 $requetesql->bindparam(':mois', $datefr);
 $requetesql->bindparam('libelle', $_POST['libelle']);
 $requetesql->bindparam(':date', $today);
 $requetesql->bindparam(':montant',$_POST['montant']);
-$requetesql->execute();
+$donnees = $requetesql->execute();
 	header('Location: acceuil.php');
   ?>
