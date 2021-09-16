@@ -22,23 +22,43 @@
 
     session_start();
 
-    $reponse = $bdd->prepare("SELECT * from fichefrais WHERE idVisiteur = ?");
+    $reponse = $bdd->prepare("SELECT * from lignefraisforfait WHERE idVisiteur = ?");
     $donnees = $reponse->execute(array($_SESSION['idvisiteur']));
-
+    ?>
+        <h1>Frais Forfait</h1>
+        <?php
     while ($donnees = $reponse->fetch()) 
     {
       ?>
       <p>
         <STRONG> ID VISITEUR </STRONG> <?php echo $donnees['idVisiteur']; ?> <br>
         <strong> Mois </strong> <?php echo $donnees['mois']; ?> <br>
-        <strong>nb justificatif</strong> <?php echo $donnees['nbJustificatifs']; ?> <br>
-        <STRONG> montant Valide </STRONG> <?php echo $donnees['montantValide']; ?><br>
-        <strong>date modif</strong> <?php echo $donnees['dateModif']; ?> <br>
-        <strong>id Etat</strong> <?php echo $donnees['idEtat']; ?> <br>
+        <strong> ID Frais Forfait </strong> <?php echo $donnees['idFraisForfait']; ?> <br>
+        <STRONG> Quantité </STRONG> <?php echo $donnees['quantite']; ?><br>
       </p> 
       <?php
     }
     $reponse->closeCursor();
   ?>
-      </body>
+  <h1>Frais Hors Forfait</h1>
+  <?php 
+  $reponse = $bdd->prepare("SELECT * from lignefraishorsforfait WHERE idVisiteur = ?");
+  $donnees = $reponse->execute(array($_SESSION['idvisiteur']));
+  while($donnees = $reponse->fetch())
+  {
+    ?>
+    <p>
+      
+      <strong> Id Frais </strong> <?php echo $donnees['id']; ?> <br>
+      <strong> ID VISITEUR </strong> <?php echo $donnees['idVisiteur']; ?> <br>
+      <strong> Mois </strong> <?php echo $donnees['mois']; ?> <br>
+      <strong> Libelle </strong> <?php echo $donnees['libelle']; ?> <br>
+      <strong> Date </strong><?php echo $donnees['date']; ?> <br>
+      <strong> montant </strong><?php echo $donnees['montant']; ?> <br>
+    </p>
+    <?php
+  }
+  $reponse->closeCursor();
+  ?>
+  </body>
 </html>
