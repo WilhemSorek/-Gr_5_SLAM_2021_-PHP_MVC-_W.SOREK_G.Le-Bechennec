@@ -21,7 +21,7 @@ class App extends BaseConfig
 	| environments.
 	|
 	*/
-	public $baseURL = 'http://gestfrais.gsb5.sio';
+	public $baseURL = 'http://gestfrais.gsb5.sio/frais';
 
 	/*
 	|--------------------------------------------------------------------------

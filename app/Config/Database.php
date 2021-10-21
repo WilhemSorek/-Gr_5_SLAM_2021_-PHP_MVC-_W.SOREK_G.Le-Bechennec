@@ -32,7 +32,7 @@ class Database extends \CodeIgniter\Database\Config
 	public $default = [
 		'DSN'      => '',
 		'hostname' => '192.168.43.120',
-		'username' => 'admindb',
+		'username' => 'usergsb',
 		'password' => 'password',
 		'database' => 'gsbV2',
 		'DBDriver' => 'mysqli',
