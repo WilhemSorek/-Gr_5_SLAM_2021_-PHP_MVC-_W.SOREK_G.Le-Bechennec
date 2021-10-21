@@ -24,7 +24,7 @@ public function login($id, $mdp) {
 
 	$db = db_connect();
 
-    $sql = 'SELECT id from Visiteur WHERE login = ? AND mdp = ?';
+    $sql = 'SELECT id from visiteur WHERE login = ? AND mdp = ?';
 	
     $resultat = $db->query($sql, [$id, $mdp]);
 
@@ -37,10 +37,10 @@ public function login($id, $mdp) {
 
 //=========================================================================
 // Fonction 2 
-// récupère les données BDD dans une fonction verifFicheFrais
+// récupère les données BDD dans une fonction veriffichefrais
 // Vérifie si une fiche frais est existe
 //=========================================================================
-public function verifFicheFrais($id, $datefr) {
+public function veriffichefrais($id, $datefr) {
 	
 //==========================================================================================
 // Connexion à la BDD en utilisant les données féninies dans le fichier app/Config/Database.php
@@ -50,7 +50,7 @@ public function verifFicheFrais($id, $datefr) {
 //=====================================
 // rédaction de la requete sql préparée
 //=====================================
-	$sql = 'SELECT * from FicheFrais WHERE idVisiteur = ? AND mois = ?';
+	$sql = 'SELECT * from fichefrais WHERE idVisiteur = ? AND mois = ?';
 	
 //=====================================================
 // execution de la requete sql en passant un parametre id
@@ -71,14 +71,14 @@ public function verifFicheFrais($id, $datefr) {
 
 //=========================================================================
 // Fonction 3
-// récupère les données BDD dans une fonction creationFicheFrais
+// récupère les données BDD dans une fonction creationfichefrais
 // créer une fichefrais et les lignes correspondantes au mois actuelle
 //=========================================================================
 
-public function creationFicheFrais($id, $datefr, $today) 
+public function creationfichefrais($id, $datefr, $today) 
 {
 $db = db_connect();
-$sql = 'INSERT INTO FicheFrais values (?, ?, ?, ?, ?, ?)';
+$sql = 'INSERT INTO fichefrais values (?, ?, ?, ?, ?, ?)';
 $db->query($sql, [$id,$datefr, 0, 0, $today, "CR"]);
 }
 
@@ -91,7 +91,7 @@ $db->query($sql, [$id,$datefr, 0, 0, $today, "CR"]);
 public function creationLigneETP($id, $datefr) 
 {
     $db = db_connect();
-    $sql = 'INSERT INTO LigneFraisForfait values (?, ?, ?, ?)';
+    $sql = 'INSERT INTO lignefraisforfait values (?, ?, ?, ?)';
     $db->query($sql, [$id, $datefr, "ETP", 0]);
 }
 
@@ -103,7 +103,7 @@ public function creationLigneETP($id, $datefr)
 
 public function creationLigneKM($id, $datefr) {
     $db = db_connect();
-    $sql = 'INSERT INTO LigneFraisForfait values (?, ?, ?, ?)';
+    $sql = 'INSERT INTO lignefraisforfait values (?, ?, ?, ?)';
     $db->query($sql, [$id,$datefr, "KM", 0]);
 }
 
@@ -116,7 +116,7 @@ public function creationLigneKM($id, $datefr) {
 public function creationLigneNUI($id, $datefr)
 {
     $db = db_connect();
-    $sql = 'INSERT INTO LigneFraisForfait values (?, ?, ?, ?)';
+    $sql = 'INSERT INTO lignefraisforfait values (?, ?, ?, ?)';
     $db->query($sql, [$id,$datefr, "NUI", 0]);
 }
 
@@ -129,7 +129,7 @@ public function creationLigneNUI($id, $datefr)
 public function creationLigneREP($id, $datefr)
 {
     $db = db_connect();
-    $sql = 'INSERT INTO LigneFraisForfait values (?, ?, ?, ?)';
+    $sql = 'INSERT INTO lignefraisforfait values (?, ?, ?, ?)';
     $db->query($sql, [$id,$datefr, "REP", 0]);
 }
 
@@ -142,7 +142,7 @@ public function creationLigneREP($id, $datefr)
 public function updateFrais($nbJusti, $frais, $mois)
 {
     $db = db_connect();
-    $sql = 'UPDATE LigneFraisForfait SET quantite = ? WHERE idFraisForfait = ? and mois = ?';
+    $sql = 'UPDATE lignefraisforfait SET quantite = ? WHERE idFraisForfait = ? and mois = ?';
     $db->query($sql, [$nbJusti, $frais, $mois]);
 }
 
@@ -155,7 +155,7 @@ public function updateFrais($nbJusti, $frais, $mois)
 public function insertFraisHF($id, $datefr, $libelle, $today, $montant)
 {
     $db = db_connect();
-    $sql = 'INSERT into LigneFraisHorsForfait (idVisiteur, mois, libelle, date, montant)
+    $sql = 'INSERT into lignefraishorsforfait (idVisiteur, mois, libelle, date, montant)
     values (?, ?, ?, ?, ?)';
     $db->query($sql, [$id, $datefr, $libelle, $today, $montant]); 
 }
@@ -169,7 +169,7 @@ public function insertFraisHF($id, $datefr, $libelle, $today, $montant)
 public function selectVDHF($id, $mois)
 {
     $db = db_connect();
-    $sql = 'SELECT * from LigneFraisHorsForfait WHERE idVisiteur = ? AND mois = ?';
+    $sql = 'SELECT * from lignefraishorsforfait WHERE idVisiteur = ? AND mois = ?';
     $trad = $this->moisTrad();
     $resultat = $db->query($sql, [$id, $trad]);
     $resultat = $resultat->getResult();
@@ -179,7 +179,7 @@ public function selectVDHF($id, $mois)
 public function selectVDF($id, $mois)
 {
     $db = db_connect();
-    $sql = 'SELECT * from LigneFraisForfait WHERE idVisiteur = ? AND mois = ?';
+    $sql = 'SELECT * from lignefraisforfait WHERE idVisiteur = ? AND mois = ?';
     $trad = $this->moisTrad();
     $resultat = $db->query($sql, [$id, $trad]);
     $resultat = $resultat->getResult();
@@ -187,10 +187,10 @@ public function selectVDF($id, $mois)
     return $resultat;
 }
 
-public function modifDateFicheFrais($today, $id, $datefr)
+public function modifDatefichefrais($today, $id, $datefr)
 {
     $db = db_connect();
-    $sql = 'UPDATE FicheFrais set dateModif = ? where idVisiteur = ? and mois = ?';
+    $sql = 'UPDATE fichefrais set dateModif = ? where idVisiteur = ? and mois = ?';
     $db->query($sql, [$today, $id, $datefr]);
 }
 

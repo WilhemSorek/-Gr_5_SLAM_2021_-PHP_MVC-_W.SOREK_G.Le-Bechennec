@@ -31,11 +31,11 @@ class Database extends \CodeIgniter\Database\Config
 	 */
 	public $default = [
 		'DSN'      => '',
-		'hostname' => '192.168.43.120',
-		'username' => 'usergsb',
+		'hostname' => '192.175.1.13',
+		'username' => 'admindb',
 		'password' => 'password',
-		'database' => 'gsbV2',
-		'DBDriver' => 'mysqli',
+		'database' => 'gsbv2',
+		'DBDriver' => 'MySQLi',
 		'DBPrefix' => '',
 		'pConnect' => false,
 		'DBDebug'  => (ENVIRONMENT !== 'production'),
