@@ -33,6 +33,7 @@ public function index()
 			case "deco":
 				$this->deconnexion();
 			break;
+			
 			case 'retouracc':
 				$this->retourAcc();
 			break;
@@ -64,7 +65,8 @@ public function updateFrais()
 	session_start();
 		$Modele = new \App\Models\Modele();
 
-		$donnees = $Modele->updateFrais($_POST['quantite'], $_POST['idfrais']);
+		$Modele->updateFrais(htmlspecialchars($_POST['quantite']), htmlspecialchars($_POST['idfrais']), $Modele->moisTrad());
+		$Modele->modifDateFicheFrais($Modele->today(), htmlspecialchars($_SESSION['id']), $Modele->moisTrad());
 
 		echo view('acceuil.php');
 }
@@ -73,14 +75,16 @@ public function insertHorsForfait()
 	session_start();
 		$Modele = new \App\Models\Modele();
 
-		$donnees = $Modele->insertFraisHF($_SESSION['id'], $Modele->moisTrad(), $_POST['libelle'], $Modele->today(), $_POST['montant']);
-
+		$Modele->insertFraisHF(htmlspecialchars($_SESSION['id']), $Modele->moisTrad(), htmlspecialchars($_POST['libelle']), $Modele->today(), htmlspecialchars($_POST['montant']));
+		$Modele->modifDateFicheFrais($Modele->today(), htmlspecialchars($_SESSION['id']), $Modele->moisTrad());
 		echo view('acceuil.php');
 }
+
 public function retourAcc()
 {
 	echo view('acceuil.php');
 }
+
 public function connexion()
 {
 	echo view('connexion.php');
@@ -126,7 +130,19 @@ public function verif($id, $mdp)
 		{
 			session_start();
 			$_SESSION['id']=$data['resultat'][0]->id;
-			echo view("acceuil.php");
+			if (empty($Modele->verifFicheFrais($_SESSION['id'], $Modele->moisTrad())))
+			{
+				$Modele->creationFicheFrais($_SESSION['id'], $Modele->moisTrad(), $Modele->today());
+				$Modele->creationLigneETP($_SESSION['id'], $Modele->moisTrad());
+				$Modele->creationLigneKM($_SESSION['id'], $Modele->moisTrad());
+				$Modele->creationLigneREP($_SESSION['id'], $Modele->moisTrad());
+				$Modele->creationLigneNUI($_SESSION['id'], $Modele->moisTrad());
+				echo view ("acceuil.php");
+			}
+			else
+			{
+				echo view("acceuil.php");
+			}
 		}
   		else
 		{
@@ -134,63 +150,6 @@ public function verif($id, $mdp)
 		}
 }
 
-
-public function accueil() {
-	    //================
-		//acces au modele
-		//================
-		$Modele = new \App\Models\Modele();
-		
-	    //===============================
-		//Appel d'une fonction du Modele
-		//===============================	
-		$donnees = $Modele->getBillets();
-		
-		//=================================================================================
-		//!!! Création d'un jeu de données $data sécurisé pouvant etre passé à la vue
-		//!!! on créé une variable qui récupère le résultat de la requete : $getBillets();
-		//=================================================================================
-		$data['resultat']=$donnees;
-		
-		//==========================================
-		//on charge la vue correspondante
-		//et on envoie le jeu de données $data à la vue
-		//la vue aura acces a une variable $resultat
-		//==========================================s
-		echo view('vueAccueil',$data);
-}
-
-// Action 2 : Affiche les détails sur un billet
-public function billet($idBillet) {
-		//================
-		//acces au modele
-		//================
-		$Modele = new \App\Models\Modele();
-		
-		//===============================
-		//Appel d'une fonction du Modele
-		//===============================	
-		$donnees = $Modele->getDetails($idBillet);
-		
-		//=================================================================================
-		//!!! Création d'un jeu de données $data sécurisé pouvant etre passé à la vue
-		//!!! on créé une variable qui récupère le résultat de la requete : $getBillets();
-		//=================================================================================
-		$data['resultat']=$donnees;
-  		
-		//==========================================
-		//on charge la vue correspondante
-		//et on envoie le jeu de données $data à la vue
-		//la vue aura acces a une variable $resultat
-		//==========================================
-  		echo view('vueBillet',$data);
-  
-}
-
-// Affiche une erreur
-public function erreur($msgErreur) {
-  echo view('vueErreur.php', $data);
-}
 
 //==========================
 //Fin du code du controleur simple
